@@ -8,6 +8,7 @@ import { HomeContainer, Product } from "@/styles/pages/home";
 import camiseta1 from '@/assets/shirt1.png'
 
 import 'keen-slider/keen-slider.min.css'
+import Link from "next/link";
 
 interface HomeProps {
   products: {
@@ -28,14 +29,16 @@ export default function Home({ products }: HomeProps) {
     <HomeContainer ref={slideRef} className="keen-slider">
       {products.map(product => {
         return (
-          <Product key={product.id} className="keen-slider__slide">
-            <Image src={product.imageUrl} width={520} height={480} alt="" placeholder="blur" blurDataURL={camiseta1.src} />
+          <Link key={product.id} href={`/product/${product.id}`}>
+            <Product className="keen-slider__slide">
+              <Image src={product.imageUrl} width={520} height={480} alt="" placeholder="blur" blurDataURL={camiseta1.src} />
 
-            <footer>
-              <strong>{product.name}</strong>
-              <span>{product.price}</span>
-            </footer>
-          </Product>
+              <footer>
+                <strong>{product.name}</strong>
+                <span>{product.price}</span>
+              </footer>
+            </Product>
+          </Link>
         )
       })}
 
