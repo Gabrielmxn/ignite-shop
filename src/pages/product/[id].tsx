@@ -15,6 +15,11 @@ interface ProductProps {
   }
 }
 export default function Product({ product }: ProductProps) {
+  const { isFallback } = useRouter()
+
+  if (isFallback) {
+    return <p>loading...</p>
+  }
   return (
     <ProductContainer>
       <ImageContainer>
@@ -38,18 +43,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: [
 
     ],
-    fallback: 'blocking'
+    fallback: true
   }
 }
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  if (!params) {
-    return {
-      props: {},
-      revalidate: 60 * 60 * 1,
-    }
-  }
-  const productId = params.id as string
+//clarity
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ params }) => {
+  const productId = params?.id as string
 
   const product = await stripe.products.retrieve(productId, {
     expand: ['default_price'],
