@@ -1,6 +1,6 @@
 import { stripe } from "@/lib/stripe"
 import { ImageContainer, ProductContainer, ProductDetails } from "@/styles/pages/product"
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import { GetStaticPaths, GetStaticProps } from "next"
 import Image from "next/image"
 import { useRouter } from "next/router"
@@ -30,24 +30,27 @@ export default function Product({ product }: ProductProps) {
     return <p>loading...</p>
   }
 
-  async function handleBuyProduct(){
-   try{
-    setIsCreateCheckoutSession(true)
-    const response = await axios.post<AxiosProps>('/api/checkout', {
-      idPrice: product.defaultPriceId,
-    })
+  async function handleBuyProduct() {
+    try {
+      setIsCreateCheckoutSession(true)
+      const response = await axios.post<AxiosProps>('/api/checkout', {
+        idPrice: product.defaultPriceId,
+      })
 
-    const { checkoutUrl } = response.data
+      const { checkoutUrl } = response.data
 
 
-    window.location.href = checkoutUrl;
+      window.location.href = checkoutUrl;
 
-   }catch(err){
-    setIsCreateCheckoutSession(false)
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        setIsCreateCheckoutSession(false)
+      }
+
 
       alert("Deu problema na API")
-   }
-    
+    }
+
   }
   return (
     <ProductContainer>
