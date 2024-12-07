@@ -29,7 +29,7 @@ export default function Home({ products }: HomeProps) {
   return (
     <>
       <Head>
-        <title>{product.name} | Ignite Shop</title>
+        <title>Home | Ignite Shop</title>
       </Head>
       <HomeContainer ref={slideRef} className="keen-slider">
         {products.map(product => {
