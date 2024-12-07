@@ -9,6 +9,7 @@ import camiseta1 from '@/assets/shirt1.png'
 
 import 'keen-slider/keen-slider.min.css'
 import Link from "next/link";
+import Head from "next/head";
 
 interface HomeProps {
   products: {
@@ -26,23 +27,28 @@ export default function Home({ products }: HomeProps) {
     }
   })
   return (
-    <HomeContainer ref={slideRef} className="keen-slider">
-      {products.map(product => {
-        return (
-          <Link key={product.id} href={`/product/${product.id}`} prefetch={false}>
-            <Product className="keen-slider__slide">
-              <Image src={product.imageUrl} width={520} height={480} alt="" placeholder="blur" blurDataURL={camiseta1.src} />
+    <>
+      <Head>
+        <title>{product.name} | Ignite Shop</title>
+      </Head>
+      <HomeContainer ref={slideRef} className="keen-slider">
+        {products.map(product => {
+          return (
+            <Link key={product.id} href={`/product/${product.id}`} prefetch={false}>
+              <Product className="keen-slider__slide">
+                <Image src={product.imageUrl} width={520} height={480} alt="" placeholder="blur" blurDataURL={camiseta1.src} />
 
-              <footer>
-                <strong>{product.name}</strong>
-                <span>{product.price}</span>
-              </footer>
-            </Product>
-          </Link>
-        )
-      })}
+                <footer>
+                  <strong>{product.name}</strong>
+                  <span>{product.price}</span>
+                </footer>
+              </Product>
+            </Link>
+          )
+        })}
 
-    </HomeContainer>
+      </HomeContainer>
+    </>
   );
 }
 
