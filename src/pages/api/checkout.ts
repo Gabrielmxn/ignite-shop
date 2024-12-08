@@ -1,8 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { stripe } from "../../lib/stripe";
+import { z } from "zod";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { idPrice } = req.body
+  const checkoutSchemaBody = z.object({
+    idPrice: z.string().array(),
+  })
+
+  
+
+  const { idPrice } = checkoutSchemaBody.parse(req.body)
+
+  console.log(idPrice)
 
   if(req.method !== 'POST'){
     res.status(405).json({
@@ -22,12 +31,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     success_url: successUrl,
     cancel_url: cancelUrl,
     mode: 'payment',
-    line_items: [
-      {
-        price: idPrice,
+    line_items: idPrice.map(price => {
+      return{
+        price: price,
         quantity: 1,
       }
-    ]
+    })
   })
 
   return res.status(201).json({
